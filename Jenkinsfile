@@ -8,22 +8,18 @@ pipeline {
             }
         }
 
-        stage('Compile') {
+        stage('Build Docker Image') {
             steps {
-                sh 'javac helloworld.java'
+                // Build the Docker image from the Dockerfile in the workspace
+                sh 'docker build -t java-hello-world:latest .'
             }
         }
 
-        stage('Execute') {
+        stage('Run Docker Container') {
             steps {
-                sh 'java helloworld'
+                // Run the container locally and check output (--rm removes container after exit)
+                sh 'docker run --rm java-hello-world:latest'
             }
-        }
-    }
-
-    post {
-        always {
-            sh 'rm -f *.class'
         }
     }
 }
